@@ -10,53 +10,90 @@
         android:id="@+id/im1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:src="@drawable/mind" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="20dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_esq"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Esquerda" />
-
-        <Button
-            android:id="@+id/btn_dir"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Direita" />
-
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
             android:orientation="vertical">
 
             <Button
                 android:id="@+id/btn_acelera"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_marginLeft="100dp"
                 android:text="Acelera" />
 
-            <Button
-                android:id="@+id/btn_trava"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:text="Trava" />
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_esq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:text="Esquerda" />
+
+                <Button
+                    android:id="@+id/btn_dir"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:text="Direita" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_trava"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:text="Trava" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_motorA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="100dp"
+                android:text="A" />
+
+            <Button
+                android:id="@+id/btn_motorB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="100dp"
+                android:text="B" />
 
         </LinearLayout>
 
     </LinearLayout>
 
 </LinearLayout>
-
-
