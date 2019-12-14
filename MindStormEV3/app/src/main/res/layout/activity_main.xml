@@ -19,19 +19,18 @@
         android:id="@+id/im1"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:src="@drawable/wal"
-        app:layout_constraintBottom_toTopOf="@+id/btn_conecta"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.57" />
+        android:src="@drawable/wal" />
 
     <Button
         android:id="@+id/btn_conecta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Conectar"
-        android:onClick="proximaTela" />
+        android:text="Conectar" />
+
+    <Button
+        android:id="@+id/btn_example"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Example" />
 
 </LinearLayout>

@@ -3,11 +3,7 @@ package bluetoothConection;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 import lejos.hardware.Bluetooth;
-import lejos.hardware.Button;
-import lejos.hardware.Key;
-import lejos.hardware.KeyListener;
 import lejos.remote.nxt.NXTConnection;
 
 public class MainClass {
@@ -15,12 +11,11 @@ public class MainClass {
 	static private DataInputStream inputDataStream = null;
 	static private DataOutputStream outputDataStream = null;
 	
-	static void startBlueToothConnection() // establish BT connection
+	static void startBlueToothConnection()
 	{
 		NXTConnection connection = null;
 		try
 		{
-			// listen for BT connections
 			System.out.println("init BT connection ...");
 			connection = Bluetooth.getNXTCommConnector().waitForConnection(10000, NXTConnection.RAW);
 			inputDataStream = connection.openDataInputStream();
@@ -29,7 +24,6 @@ public class MainClass {
 		} 
 		catch (Exception a)
 		{
-			// TODO : properly reestablish BT connection on error
 			System.out.println("ERROR: shit hit the fan");
 			Bluetooth.getNXTCommConnector().cancel();
 			
@@ -48,22 +42,6 @@ public class MainClass {
 	
 	public static void main(String[] args) 
 	{
-		
-		// emergency exit :)
-		Button.ESCAPE.addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyPressed(Key k) {
-				System.exit(0);
-				
-			}
-
-			@Override
-			public void keyReleased(Key k) {
-				// TODO Auto-generated method stub
-			}
-		});
-
 		startBlueToothConnection();
 	}
 	

@@ -9,8 +9,9 @@ public class MotorControl {
 	private UnregulatedMotor rightMotor = null;
 	private static int MAX_POWER = 50; // maximum engine power
 
+	int msgRecebida = 0;
+	
 	public MotorControl() {
-		// init
 		leftMotor = new UnregulatedMotor(MotorPort.A);
 		rightMotor = new UnregulatedMotor(MotorPort.D);
 
@@ -27,36 +28,17 @@ public class MotorControl {
 	{
 		System.out.println("cmd recv: " + command);
 		// received command to shut down engines ?
-		if (command < 0) {
-			freeMotors();
-			return;
-		}
-
-		double vertical = Math.sin(Math.PI / 180 * command); // "vertical power"
-
-		int leftPower, rightPower = (int) Math.round(Math.abs(vertical) * (double) MAX_POWER);
-		leftPower = rightPower;
-
-		// go to 2nd or 3rd quadrant === left ?
-		if (command >= 90 && command <= 270)
-			rightPower = MAX_POWER;
-		else // go to 1st or 4th quadrant === right
-			leftPower = MAX_POWER;
-
-		// forwards ?
-		if (vertical >= 0) {
-			leftMotor.forward();
-			leftMotor.setPower(leftPower);
-			rightMotor.forward();
-			rightMotor.setPower(rightPower);
-		} else // backwards
-		{
-			leftMotor.backward();
-			leftMotor.setPower(leftPower);
-			rightMotor.backward();
-			rightMotor.setPower(rightPower);
-		}
-
+	
+		if ( msgRecebida == 1 ) {
+			System.out.println("anda pra frente");
+		} else if(msgRecebida == 2) {
+			System.out.println("anda pra a direita");
+		} else if(msgRecebida == 3) {
+			System.out.println("anda pra a esquerda");
+		} 
+		else if(msgRecebida == 4) {
+			System.out.println("anda pra tras");
+		} 
 	}
 
 }

@@ -1,147 +1,185 @@
 package com.example.mindstormev3;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Button;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.Set;
 import java.util.UUID;
 
-public class Example extends AppCompatActivity {
+public class Example extends Activity {
 
-    private final static String TAG = "MainActivity";
-    private BluetoothAdapter mBluetoothAdapter;
-    private static BluetoothDevice mDevice;
-    private Button mSendBN;
+    TextView myLabel;
+    EditText myTextbox;
+    BluetoothAdapter mBluetoothAdapter;
+    BluetoothSocket mmSocket;
+    BluetoothDevice mmDevice;
+    OutputStream mmOutputStream;
+    InputStream mmInputStream;
+    Thread workerThread;
+    byte[] readBuffer;
+    int readBufferPosition;
+    int counter;
+    volatile boolean stopWorker;
 
-    private final static String MY_UUID = "00001101-0000-1000-8000-00805f9b34fb";
-    private static BluetoothSocket mSocket = null;
-    private static String mMessage = "Stop";
-    private static PrintStream sender;
-
-    private void findBrick() {
-        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter
-                .getBondedDevices();
-        for (BluetoothDevice device : pairedDevices) {
-            if (device.getName().equals("EV3"))
-                this.mDevice = device;
-        }
-    }
-
-    private void initBluetooth() {
-        Log.d(TAG, "Checking Bluetooth...");
-        if (mBluetoothAdapter == null) {
-            Log.d(TAG, "Device does not support Bluetooth");
-            mSendBN.setClickable(false);
-        } else {
-            Log.d(TAG, "Bluetooth supported");
-        }
-        if (!mBluetoothAdapter.isEnabled()) {
-            mSendBN.setClickable(false);
-            Log.d(TAG, "Bluetooth not enabled");
-        } else {
-            Log.d(TAG, "Bluetooth enabled");
-        }
-    }
-
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        Toast.makeText(this, "SpeechRecognizer gestartet", Toast.LENGTH_SHORT).show();
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main);
 
-        mSendBN = (Button) findViewById(R.id.button);
+        Button openButton = (Button)findViewById(R.id.open);
+        Button sendButton = (Button)findViewById(R.id.send);
+        Button closeButton = (Button)findViewById(R.id.close);
+        myLabel = (TextView)findViewById(R.id.label);
+        myTextbox = (EditText)findViewById(R.id.entry);
+
+        //Open Button
+        openButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                try{
+                    findBT();
+                    openBT();
+                }
+                catch (IOException ex) { }
+            }
+        });
+
+        //Send Button
+        sendButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                try{
+                    sendData();
+                }
+                catch (IOException ex) { }
+            }
+        });
+
+        //Close button
+        closeButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                try {
+                    closeBT();
+                }
+                catch (IOException ex) { }
+            }
+        });
+    }
+
+    void findBT(){
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        initBluetooth();
-        findBrick();
-
-        if (mDevice == null) {
-            mSendBN.setClickable(false);
-            Toast.makeText(this, "No Devices found or BT disabled", Toast.LENGTH_SHORT).show();
-            Log.d("onC", "Connected to " + mDevice);
+        if(mBluetoothAdapter == null){
+            myLabel.setText("No bluetooth adapter available");
         }
 
-        try {
-            createSocket();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(!mBluetoothAdapter.isEnabled()){
+            Intent enableBluetooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBluetooth, 0);
         }
-        startService();
-    }
 
-    private void startService() {
-        if (PermissionHandler.checkPermission(this, PermissionHandler.RECORD_AUDIO)) {
-            Intent i = new Intent(this, BackgroundRecognizerService.class);
-            startService(i);
-        }
-    }
-
-    public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PermissionHandler.RECORD_AUDIO && grantResults.length > 0) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startService();
+        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+        if(pairedDevices.size() > 0){
+            for(BluetoothDevice device : pairedDevices) {
+                if(device.getName().equals("EV3")) {
+                    mmDevice = device;
+                    break;
+                }
             }
         }
+        myLabel.setText("Bluetooth Device Found");
     }
 
-    public static void onSend(View view) throws IOException {
-        try {
-            OutputStream os = mSocket.getOutputStream();
-            sender = new PrintStream(os);
-            Log.d("onSend", "Message = " + mMessage);
-            sender.println(mMessage);
-            sender.flush();
-            Log.d("onSend", "Message sent");
-            mSocket.close();
-            Log.d("onSend", "Socket closed");
-        } catch (IllegalStateException | NullPointerException e) {
-            e.printStackTrace();
-        }
+    void openBT() throws IOException {
+        UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); //Standard SerialPortService ID
+        mmSocket = mmDevice.createRfcommSocketToServiceRecord(uuid);
+        mmSocket.connect();
+        mmOutputStream = mmSocket.getOutputStream();
+        mmInputStream = mmSocket.getInputStream();
 
+        beginListenForData();
+
+        myLabel.setText("Bluetooth Opened");
     }
 
-    public void createSocket() throws IOException {
-        try {
-            UUID uuid = UUID.fromString(MY_UUID);
-            mSocket = mDevice.createRfcommSocketToServiceRecord(uuid);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    void beginListenForData()
+    {
+        final Handler handler = new Handler();
+        final byte delimiter = 10; //This is the ASCII code for a newline character
 
-        Log.d("createSocket", "Adapter");
+        stopWorker = false;
+        readBufferPosition = 0;
+        readBuffer = new byte[1024];
+        workerThread = new Thread(new Runnable() {
+            public void run(){
+                while(!Thread.currentThread().isInterrupted() && !stopWorker) {
+                    try
+                    {
+                        int bytesAvailable = mmInputStream.available();
+                        if(bytesAvailable > 0)
+                        {
+                            byte[] packetBytes = new byte[bytesAvailable];
+                            mmInputStream.read(packetBytes);
+                            for(int i=0;i<bytesAvailable;i++)
+                            {
+                                byte b = packetBytes[i];
+                                if(b == delimiter)
+                                {
+                                    byte[] encodedBytes = new byte[readBufferPosition];
+                                    System.arraycopy(readBuffer, 0, encodedBytes, 0, encodedBytes.length);
+                                    final String data = new String(encodedBytes, "US-ASCII");
+                                    readBufferPosition = 0;
 
-        BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-        mSocket.connect();
-        OutputStream os = mSocket.getOutputStream();
-        sender = new PrintStream(os);
+                                    handler.post(new Runnable()
+                                    {
+                                        public void run()
+                                        {
+                                            myLabel.setText(data);
+                                        }
+                                    });
+                                }
+                                else
+                                {
+                                    readBuffer[readBufferPosition++] = b;
+                                }
+                            }
+                        }
+                    }
+                    catch (IOException ex)
+                    {
+                        stopWorker = true;
+                    }
+                }
+            }
+        });
 
-        Log.d("createSocket", "Fertig, " + "Socket: " + mSocket + " Sender: " + sender + " OutputStream: " + os + " mDevice: " + mDevice.getName());
+        workerThread.start();
     }
 
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d("onDestroy", "App beendet");
-        try {
-            mSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Log.d("onDestroy", "App vollständig beendet");
+    void sendData() throws IOException
+    {
+        String msg = myTextbox.getText().toString();
+        msg += "\n";
+        mmOutputStream.write(msg.getBytes());
+        myLabel.setText("Data Sent");
     }
+
+    void closeBT() throws IOException
+    {
+        stopWorker = true;
+        mmOutputStream.close();
+        mmInputStream.close();
+        mmSocket.close();
+        myLabel.setText("Bluetooth Closed");
+    }
+
 }

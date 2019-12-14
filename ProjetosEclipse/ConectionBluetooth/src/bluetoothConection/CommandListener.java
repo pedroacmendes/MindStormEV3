@@ -13,7 +13,6 @@ public class CommandListener {
 		motorControl = new MotorControl();
 	}
 	
-	@Override
 	public void run() {
 		System.out.println("Recv:");
 		int input = 1;
