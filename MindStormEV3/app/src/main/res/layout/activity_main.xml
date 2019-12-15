@@ -18,14 +18,8 @@
     <ImageView
         android:id="@+id/im1"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="300dp"
         android:src="@drawable/wal" />
-
-    <Button
-        android:id="@+id/btn_conecta"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Conectar" />
 
     <Button
         android:id="@+id/btn_example"
