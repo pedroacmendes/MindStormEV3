@@ -12,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Example"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +21,7 @@
         <activity android:name=".ModoJogo"
             android:screenOrientation="landscape"
             android:theme="@style/AppThemeNoActionBar"></activity>
-
+        <activity android:name=".Conection"> </activity>
     </application>
 
 </manifest>

@@ -12,6 +12,4 @@ public class ModoJogo extends AppCompatActivity {
         setContentView(R.layout.activity_modojogo);
     }
 
-
-
 }
