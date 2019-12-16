@@ -8,8 +8,6 @@ public class MotorControl {
 	private UnregulatedMotor leftMotor = null;
 	private UnregulatedMotor rightMotor = null;
 	private static int MAX_POWER = 50; // maximum engine power
-
-	int msgRecebida = 0;
 	
 	public MotorControl() {
 		leftMotor = new UnregulatedMotor(MotorPort.A);
@@ -29,14 +27,14 @@ public class MotorControl {
 		System.out.println("cmd recv: " + command);
 		// received command to shut down engines ?
 	
-		if ( msgRecebida == 1 ) {
+		if ( command == 825307441 ) {
 			System.out.println("anda pra frente");
-		} else if(msgRecebida == 2) {
+		} else if(command == 2) {
 			System.out.println("anda pra a direita");
-		} else if(msgRecebida == 3) {
+		} else if(command == 3) {
 			System.out.println("anda pra a esquerda");
 		} 
-		else if(msgRecebida == 4) {
+		else if(command == 4) {
 			System.out.println("anda pra tras");
 		} 
 	}
