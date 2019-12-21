@@ -26,23 +26,22 @@ public class MotorControl {
 	public void executeCommand(int command) // command -- degrees, in which the robot should move (in a coordinate
 											// system ; unit circle)
 	{
-		//System.out.println("cmd recv: " + command);
+		System.out.println("cmd recv: " + command);
 		// received command to shut down engines ?
 	
-		if ( command == 825307441 ) {
+		if ( command == 943208504 ) {
 			System.out.println("anda pra frente");
 			leftMotor.setPower(50);
 			rightMotor.setPower(50);
-		} else if(command == 875836468) {
+		} else if(command == 825241904) {
 			System.out.println("anda pra a direita");
 			leftMotor.setPower(0);
 			rightMotor.setPower(50);
-		} else if(command == 875836211) {
+		} else if(command == 825504052) {
 			System.out.println("anda pra a esquerda");
 			leftMotor.setPower(50);
 			rightMotor.setPower(0);
-		} 
-		else if(command == 842150450) {
+		} else if(command == 842281524) {
 			System.out.println("Parar");
 			leftMotor.setPower(0);
 			rightMotor.setPower(0);

@@ -24,7 +24,7 @@ public class MainClass {
 		} 
 		catch (Exception a)
 		{
-			System.out.println("ERROR: shit hit the fan");
+			System.out.println("ERROR");
 			Bluetooth.getNXTCommConnector().cancel();
 			
 			try {

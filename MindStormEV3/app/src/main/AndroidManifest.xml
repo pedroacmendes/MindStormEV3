@@ -21,7 +21,6 @@
         <activity android:name=".ModoJogo"
             android:screenOrientation="landscape"
             android:theme="@style/AppThemeNoActionBar"></activity>
-        <activity android:name=".Conection"> </activity>
     </application>
 
 </manifest>
