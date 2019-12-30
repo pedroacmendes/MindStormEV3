@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mindstormev3">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
@@ -12,15 +13,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity android:name=".ResetPassword"
+            android:theme="@style/AppThemeNoActionBar"/>
+
+        <activity android:name=".PerfilActivity" />
+
+        <activity android:name=".RegistoActivity"
+            android:theme="@style/AppThemeNoActionBar"/>
+
+        <activity android:name=".LoginActivity"
+            android:theme="@style/AppThemeNoActionBar"/>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ModoJogo"
+
+        <activity
+            android:name=".ModoJogo"
             android:screenOrientation="landscape"
-            android:theme="@style/AppThemeNoActionBar"></activity>
+            android:theme="@style/AppThemeNoActionBar" />
+
     </application>
 
 </manifest>

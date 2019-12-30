@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "385429223012",
+    "firebase_url": "https://mindstormev3-109ae.firebaseio.com",
+    "project_id": "mindstormev3-109ae",
+    "storage_bucket": "mindstormev3-109ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:385429223012:android:232eb9f9b9747105195171",
+        "android_client_info": {
+          "package_name": "com.example.mindstormev3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "385429223012-6ochtmjhgbsgrhjfmmiic4lmr25bgquc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9Hqxd0npA0ifRuJm-_GKlLENhyHFnR8c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "385429223012-6ochtmjhgbsgrhjfmmiic4lmr25bgquc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
