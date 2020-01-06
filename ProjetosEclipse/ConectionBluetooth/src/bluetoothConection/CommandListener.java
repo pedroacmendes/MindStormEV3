@@ -14,9 +14,9 @@ public class CommandListener {
 	}
 	
 	public void run() {
-		System.out.println("Recv:");
-		int input = 1;
-		while(input > -2)
+		//System.out.println("Recv:");
+		int input = 0;
+		while(input > -1)
 		{
 			try 
 			{

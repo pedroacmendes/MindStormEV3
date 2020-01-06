@@ -30,6 +30,7 @@ public class ModoJogo extends AppCompatActivity {
     private Button btn_esquerda;
     private Button btn_direita;
     private Button btn_trava;
+    private Button btn_tras;
     private Button btn_conec;
     private Button btn_motorB;
 
@@ -59,6 +60,7 @@ public class ModoJogo extends AppCompatActivity {
         btn_direita = (Button) findViewById(R.id.btn_direita);
         btn_esquerda = (Button) findViewById(R.id.btn_esquerda);
         btn_trava = (Button) findViewById(R.id.btn_trava);
+        btn_tras = (Button) findViewById(R.id.btn_tras);
         btn_conec = (Button) findViewById(R.id.btn_conec);
         btn_motorB= (Button) findViewById(R.id.btn_motorB);
 
@@ -119,6 +121,15 @@ public class ModoJogo extends AppCompatActivity {
                 public void onClick(View v){
                     if(mConnectedThread != null) //First check to make sure thread created
                         mConnectedThread.write("10");
+                    mBTArrayAdapter.clear();
+                }
+            });
+
+            btn_tras.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    if(mConnectedThread != null) //First check to make sure thread created
+                        mConnectedThread.write("50");
                     mBTArrayAdapter.clear();
                 }
             });

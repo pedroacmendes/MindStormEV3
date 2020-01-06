@@ -27,9 +27,10 @@
 
             <Button
                 android:id="@+id/btn_acelera"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="100dp"
+                android:layout_marginLeft="120dp"
+                android:backgroundTint="#EE0450EC"
                 android:text="Acelera" />
 
             <LinearLayout
@@ -39,16 +40,27 @@
 
                 <Button
                     android:id="@+id/btn_esquerda"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:backgroundTint="#EE0450EC"
                     android:text="Esquerda" />
 
                 <Button
-                    android:id="@+id/btn_direita"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/btn_trava"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:backgroundTint="#FAE20505"
+                    android:shadowColor="#00EB0707"
+                    android:text="STOP" />
+
+                <Button
+                    android:id="@+id/btn_direita"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:backgroundTint="#EE0450EC"
                     android:text="Direita" />
 
 
@@ -60,11 +72,12 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/btn_trava"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/btn_tras"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="100dp"
-                    android:text="Trava" />
+                    android:layout_marginLeft="120dp"
+                    android:backgroundTint="#EE0450EC"
+                    android:text="Para trás" />
 
             </LinearLayout>
 
@@ -88,6 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="50dp"
                     android:layout_marginTop="70dp"
+                    android:backgroundTint="#FA1B9B17"
                     android:text="Listar" />
 
                 <Button
@@ -96,6 +110,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="70dp"
+                    android:backgroundTint="#FAE20505"
                     android:text="Fechar" />
 
             </LinearLayout>
@@ -109,7 +124,6 @@
                 android:choiceMode="singleChoice" />
 
         </LinearLayout>
-
 
 
     </LinearLayout>
