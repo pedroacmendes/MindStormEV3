@@ -37,7 +37,7 @@ public class MotorControl {
 			leftMotor.setPower(0);
 			rightMotor.setPower(0);
 		} else if(command == 892351792) {
-			//System.out.println("Para traz");
+			//System.out.println("Para tras");
 			leftMotor.setPower(-50);
 			rightMotor.setPower(-50);
 		}

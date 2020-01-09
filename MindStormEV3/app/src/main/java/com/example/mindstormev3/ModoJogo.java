@@ -71,6 +71,8 @@ public class ModoJogo extends AppCompatActivity {
         mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
         mDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
+
+
         mHandler = new Handler(){
             public void handleMessage(android.os.Message msg){
                 if(msg.what == MESSAGE_READ){
@@ -94,6 +96,8 @@ public class ModoJogo extends AppCompatActivity {
                 public void onClick(View v){
                     if(mConnectedThread != null) //First check to make sure thread created
                         mConnectedThread.write("88");
+                        mConnectedThread.write("88");
+                        Toast.makeText(ModoJogo.this, "Estou a andar para a frente", Toast.LENGTH_SHORT).show();
                     mBTArrayAdapter.clear();
                 }
             });
@@ -103,6 +107,8 @@ public class ModoJogo extends AppCompatActivity {
                 public void onClick(View v){
                     if(mConnectedThread != null) //First check to make sure thread created
                         mConnectedThread.write("24");
+                        mConnectedThread.write("24");
+                        Toast.makeText(ModoJogo.this, "Parei de andar", Toast.LENGTH_SHORT).show();
                     mBTArrayAdapter.clear();
                 }
             });
@@ -110,8 +116,12 @@ public class ModoJogo extends AppCompatActivity {
             btn_esquerda.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    if(mConnectedThread != null) //First check to make sure thread created
+                    if(mConnectedThread != null)  {
                         mConnectedThread.write("14");
+                        mConnectedThread.write("14");
+                        Toast.makeText(ModoJogo.this, "Estou a andar para a esquerda", Toast.LENGTH_SHORT).show();
+                    }//First check to make sure thread created
+
                     mBTArrayAdapter.clear();
                 }
             });
@@ -121,6 +131,8 @@ public class ModoJogo extends AppCompatActivity {
                 public void onClick(View v){
                     if(mConnectedThread != null) //First check to make sure thread created
                         mConnectedThread.write("10");
+                        mConnectedThread.write("10");
+                    Toast.makeText(ModoJogo.this, "Estou a andar para a direita", Toast.LENGTH_SHORT).show();
                     mBTArrayAdapter.clear();
                 }
             });
@@ -130,6 +142,8 @@ public class ModoJogo extends AppCompatActivity {
                 public void onClick(View v){
                     if(mConnectedThread != null) //First check to make sure thread created
                         mConnectedThread.write("50");
+                        mConnectedThread.write("50");
+                        Toast.makeText(ModoJogo.this, "Estou a andar para trás", Toast.LENGTH_SHORT).show();
                     mBTArrayAdapter.clear();
                 }
             });
