@@ -40,7 +40,24 @@ public class MotorControl {
 			//System.out.println("Para tras");
 			leftMotor.setPower(-50);
 			rightMotor.setPower(-50);
-		}
+		} else if(command == 858927922) {
+			//System.out.println("Para andar sozinho");
+			leftMotor.setPower(50);
+			rightMotor.setPower(50);
+			Delay.msDelay(3000);
+			leftMotor.setPower(0);
+			rightMotor.setPower(50);
+			Delay.msDelay(3000);
+			leftMotor.setPower(50);
+			rightMotor.setPower(0);
+			Delay.msDelay(3000);
+			leftMotor.setPower(50);
+			rightMotor.setPower(50);
+			Delay.msDelay(3000);
+			leftMotor.setPower(0);
+			rightMotor.setPower(0);
+			
+		} 
 	}
 
 }

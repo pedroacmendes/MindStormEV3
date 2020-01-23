@@ -35,8 +35,7 @@ public class ColorSensor {
 			System.out.println("Nao conheco esta cor :(");
 		}
 
-		System.out.println("");
-		System.out.println("Pressione para sair");
+		System.out.println("\n Pressione para sair");
 		Button.waitForAnyPress();
 
 	}

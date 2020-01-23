@@ -16,7 +16,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -33,6 +35,7 @@ public class ModoJogo extends AppCompatActivity {
     private Button btn_tras;
     private Button btn_conec;
     private Button btn_motorB;
+    private Button btn_sozinho;
 
     public BluetoothAdapter mBTAdapter;
     public Set<BluetoothDevice> mPairedDevices;
@@ -61,21 +64,21 @@ public class ModoJogo extends AppCompatActivity {
         btn_esquerda = (Button) findViewById(R.id.btn_esquerda);
         btn_trava = (Button) findViewById(R.id.btn_trava);
         btn_tras = (Button) findViewById(R.id.btn_tras);
+        btn_sozinho = (Button) findViewById(R.id.btn_sozinho);
         btn_conec = (Button) findViewById(R.id.btn_conec);
-        btn_motorB= (Button) findViewById(R.id.btn_motorB);
+        btn_motorB = (Button) findViewById(R.id.btn_motorB);
 
-        mBTArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1);
+        mBTArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         mBTAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        mDevicesListView = (ListView)findViewById(R.id.devicesListView);
+        mDevicesListView = (ListView) findViewById(R.id.devicesListView);
         mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
         mDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
 
-
-        mHandler = new Handler(){
-            public void handleMessage(android.os.Message msg){
-                if(msg.what == MESSAGE_READ){
+        mHandler = new Handler() {
+            public void handleMessage(android.os.Message msg) {
+                if (msg.what == MESSAGE_READ) {
                     String readMessage = null;
                     try {
                         readMessage = new String((byte[]) msg.obj, "UTF-8");
@@ -88,96 +91,107 @@ public class ModoJogo extends AppCompatActivity {
         };
 
         if (mBTArrayAdapter == null) {
-            Toast.makeText(getApplicationContext(),"Bluetooth device not found!", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            btn_acelera.setOnClickListener(new View.OnClickListener(){
+            Toast.makeText(getApplicationContext(), "Bluetooth device not found!", Toast.LENGTH_SHORT).show();
+        } else {
+            btn_acelera.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v){
-                    if(mConnectedThread != null) //First check to make sure thread created
+                public void onClick(View v) {
+                    if (mConnectedThread != null) {
                         mConnectedThread.write("88");
                         mConnectedThread.write("88");
                         Toast.makeText(ModoJogo.this, "Estou a andar para a frente", Toast.LENGTH_SHORT).show();
+                    }
                     mBTArrayAdapter.clear();
                 }
             });
 
-            btn_trava.setOnClickListener(new View.OnClickListener(){
+            btn_trava.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v){
-                    if(mConnectedThread != null) //First check to make sure thread created
+                public void onClick(View v) {
+                    if (mConnectedThread != null) {
                         mConnectedThread.write("24");
                         mConnectedThread.write("24");
                         Toast.makeText(ModoJogo.this, "Parei de andar", Toast.LENGTH_SHORT).show();
+                    }
                     mBTArrayAdapter.clear();
                 }
             });
 
-            btn_esquerda.setOnClickListener(new View.OnClickListener(){
+            btn_esquerda.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v){
-                    if(mConnectedThread != null)  {
+                public void onClick(View v) {
+                    if (mConnectedThread != null) {
                         mConnectedThread.write("14");
                         mConnectedThread.write("14");
                         Toast.makeText(ModoJogo.this, "Estou a andar para a esquerda", Toast.LENGTH_SHORT).show();
-                    }//First check to make sure thread created
-
+                    }
                     mBTArrayAdapter.clear();
                 }
             });
 
-            btn_direita.setOnClickListener(new View.OnClickListener(){
+            btn_direita.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v){
-                    if(mConnectedThread != null) //First check to make sure thread created
+                public void onClick(View v) {
+                    if (mConnectedThread != null) {
                         mConnectedThread.write("10");
                         mConnectedThread.write("10");
-                    Toast.makeText(ModoJogo.this, "Estou a andar para a direita", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ModoJogo.this, "Estou a andar para a direita", Toast.LENGTH_SHORT).show();
+                    }
                     mBTArrayAdapter.clear();
                 }
             });
 
-            btn_tras.setOnClickListener(new View.OnClickListener(){
+            btn_tras.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v){
-                    if(mConnectedThread != null) //First check to make sure thread created
+                public void onClick(View v) {
+                    if (mConnectedThread != null) {
                         mConnectedThread.write("50");
                         mConnectedThread.write("50");
                         Toast.makeText(ModoJogo.this, "Estou a andar para trás", Toast.LENGTH_SHORT).show();
+                    }
                     mBTArrayAdapter.clear();
                 }
             });
 
-            btn_conec.setOnClickListener(new View.OnClickListener(){
+            btn_sozinho.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v){
+                public void onClick(View v) {
+                    if (mConnectedThread != null) {
+                        mConnectedThread.write("32");
+                        mConnectedThread.write("32");
+                        Toast.makeText(ModoJogo.this, "Estou a andar sozinho", Toast.LENGTH_SHORT).show();
+                    }
+                    mBTArrayAdapter.clear();
+                }
+            });
+
+            btn_conec.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     bluetoothOn(v);
                     discover(v);
                 }
             });
 
-            btn_motorB.setOnClickListener(new View.OnClickListener(){
+            btn_motorB.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v){
+                public void onClick(View v) {
                     bluetoothOff(v);
                     finish();
                 }
             });
-
         }
     }
 
-
-    private void bluetoothOn(View v){
+    private void bluetoothOn(View v) {
         if (!mBTAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            Toast.makeText(getApplicationContext(),"Bluetooth turned on",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Bluetooth turned on", Toast.LENGTH_SHORT).show();
 
-        } else{
-            Toast.makeText(getApplicationContext(),"Bluetooth is already on", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Bluetooth is already on", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     @Override
@@ -185,24 +199,22 @@ public class ModoJogo extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, Data);
     }
 
-    private void bluetoothOff(View view){
+    private void bluetoothOff(View view) {
         mBTAdapter.disable();
-        Toast.makeText(getApplicationContext(),"Bluetooth turned Off", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Bluetooth turned Off", Toast.LENGTH_SHORT).show();
     }
 
-    private void discover(View view){
-        if(mBTAdapter.isDiscovering()){
+    private void discover(View view) {
+        if (mBTAdapter.isDiscovering()) {
             mBTAdapter.cancelDiscovery();
-            Toast.makeText(getApplicationContext(),"Discovery stopped",Toast.LENGTH_SHORT).show();
-        }
-        else{
-            if(mBTAdapter.isEnabled()) {
+            Toast.makeText(getApplicationContext(), "Discovery stopped", Toast.LENGTH_SHORT).show();
+        } else {
+            if (mBTAdapter.isEnabled()) {
                 mBTArrayAdapter.clear(); //LIMPA O ARRAY
                 mBTAdapter.startDiscovery();
                 Toast.makeText(getApplicationContext(), "A procurar EV3", Toast.LENGTH_SHORT).show();
                 registerReceiver(blReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-            }
-            else{
+            } else {
                 Toast.makeText(getApplicationContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();
             }
         }
@@ -212,7 +224,7 @@ public class ModoJogo extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if(BluetoothDevice.ACTION_FOUND.equals(action)){
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
                 mBTArrayAdapter.add(device.getName() + "\n" + device.getAddress());
@@ -239,7 +251,7 @@ public class ModoJogo extends AppCompatActivity {
     private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
 
-            if(!mBTAdapter.isEnabled()) {
+            if (!mBTAdapter.isEnabled()) {
                 Toast.makeText(getBaseContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -247,11 +259,10 @@ public class ModoJogo extends AppCompatActivity {
             // Get the device MAC address, which is the last 17 chars in the View
             String info = ((TextView) v).getText().toString();
             final String address = info.substring(info.length() - 17);
-            final String name = info.substring(0,info.length() - 17);
+            final String name = info.substring(0, info.length() - 17);
 
             // Spawn a new thread to avoid blocking the GUI one
-            new Thread()
-            {
+            new Thread() {
                 public void run() {
                     boolean fail = false;
 
@@ -277,7 +288,7 @@ public class ModoJogo extends AppCompatActivity {
                             Toast.makeText(getBaseContext(), "Socket creation failed", Toast.LENGTH_SHORT).show();
                         }
                     }
-                    if(fail == false) {
+                    if (fail == false) {
                         mConnectedThread = new ConnectedThread(mBTSocket);
                         mConnectedThread.start();
 
@@ -290,7 +301,7 @@ public class ModoJogo extends AppCompatActivity {
     };
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
-        return  device.createRfcommSocketToServiceRecord(BTMODULEUUID);
+        return device.createRfcommSocketToServiceRecord(BTMODULEUUID);
     }
 
     public class ConnectedThread extends Thread {
@@ -306,7 +317,8 @@ public class ModoJogo extends AppCompatActivity {
             try {
                 tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
-            } catch (IOException e) { }
+            } catch (IOException e) {
+            }
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
@@ -320,7 +332,7 @@ public class ModoJogo extends AppCompatActivity {
                 try {
                     // Read from the InputStream
                     bytes = mmInStream.available();
-                    if(bytes != 0) {
+                    if (bytes != 0) {
                         //SystemClock.sleep(10); //pause and wait for rest of data. Adjust this depending on your sending speed.
                         bytes = mmInStream.available(); // how many bytes are ready to be read?
                         bytes = mmInStream.read(buffer, 0, bytes); // record how many bytes we actually read
@@ -339,14 +351,16 @@ public class ModoJogo extends AppCompatActivity {
             byte[] bytes = input.getBytes();           //converts entered String into bytes
             try {
                 mmOutStream.write(bytes);
-            } catch (IOException e) { }
+            } catch (IOException e) {
+            }
         }
 
         /* Call this from the main activity to shutdown the connection */
         public void cancel() {
             try {
                 mmSocket.close();
-            } catch (IOException e) { }
+            } catch (IOException e) {
+            }
         }
     }
 }
