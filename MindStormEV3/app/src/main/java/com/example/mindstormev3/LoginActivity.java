@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             alert("user correto");
-                            Intent intent = new Intent(LoginActivity.this, ModoJogo.class);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                         } else {
                             alert("email ou pass errado");

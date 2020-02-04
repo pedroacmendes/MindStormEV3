@@ -16,15 +16,26 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
+import static com.example.mindstormev3.Conection.getFirebaseUser;
 
 public class ModoJogo extends AppCompatActivity {
 
@@ -34,8 +45,8 @@ public class ModoJogo extends AppCompatActivity {
     private Button btn_trava;
     private Button btn_tras;
     private Button btn_conec;
-    private Button btn_motorB;
     private Button btn_sozinho;
+    private Button btn_color;
 
     public BluetoothAdapter mBTAdapter;
     public Set<BluetoothDevice> mPairedDevices;
@@ -54,6 +65,12 @@ public class ModoJogo extends AppCompatActivity {
     public final static int MESSAGE_READ = 2;
     public final static int CONNECTING_STATUS = 3;
 
+    //firebase database
+    DatabaseReference reff;
+    Movimentos movimentos;
+
+    Date data = new Date();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +83,7 @@ public class ModoJogo extends AppCompatActivity {
         btn_tras = (Button) findViewById(R.id.btn_tras);
         btn_sozinho = (Button) findViewById(R.id.btn_sozinho);
         btn_conec = (Button) findViewById(R.id.btn_conec);
-        btn_motorB = (Button) findViewById(R.id.btn_motorB);
+        btn_color = (Button) findViewById(R.id.btn_color);
 
         mBTArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         mBTAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -74,6 +91,16 @@ public class ModoJogo extends AppCompatActivity {
         mDevicesListView = (ListView) findViewById(R.id.devicesListView);
         mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
         mDevicesListView.setOnItemClickListener(mDeviceClickListener);
+
+        //bluetoothOn();
+
+        String auth = getFirebaseUser().getEmail();
+        Toast.makeText(this, "Welcome " + auth, Toast.LENGTH_SHORT).show();
+
+        auth = auth.replaceAll("[^a-zZ-Z1-9 ]", "");
+
+        movimentos = new Movimentos();
+        reff = FirebaseDatabase.getInstance().getReference().child("Movimentos").child(auth);
 
 
         mHandler = new Handler() {
@@ -99,6 +126,9 @@ public class ModoJogo extends AppCompatActivity {
                     if (mConnectedThread != null) {
                         mConnectedThread.write("88");
                         mConnectedThread.write("88");
+                        movimentos.setMovimento("Andei para a frente");
+                        movimentos.setData(data);
+                        reff.push().setValue(movimentos);
                         Toast.makeText(ModoJogo.this, "Estou a andar para a frente", Toast.LENGTH_SHORT).show();
                     }
                     mBTArrayAdapter.clear();
@@ -111,6 +141,9 @@ public class ModoJogo extends AppCompatActivity {
                     if (mConnectedThread != null) {
                         mConnectedThread.write("24");
                         mConnectedThread.write("24");
+                        movimentos.setMovimento("Parei de andar");
+                        movimentos.setData(data);
+                        reff.push().setValue(movimentos);
                         Toast.makeText(ModoJogo.this, "Parei de andar", Toast.LENGTH_SHORT).show();
                     }
                     mBTArrayAdapter.clear();
@@ -123,6 +156,9 @@ public class ModoJogo extends AppCompatActivity {
                     if (mConnectedThread != null) {
                         mConnectedThread.write("14");
                         mConnectedThread.write("14");
+                        movimentos.setMovimento("Andei para a esquerda");
+                        movimentos.setData(data);
+                        reff.push().setValue(movimentos);
                         Toast.makeText(ModoJogo.this, "Estou a andar para a esquerda", Toast.LENGTH_SHORT).show();
                     }
                     mBTArrayAdapter.clear();
@@ -135,6 +171,9 @@ public class ModoJogo extends AppCompatActivity {
                     if (mConnectedThread != null) {
                         mConnectedThread.write("10");
                         mConnectedThread.write("10");
+                        movimentos.setMovimento("Andei para a direita");
+                        movimentos.setData(data);
+                        reff.push().setValue(movimentos);
                         Toast.makeText(ModoJogo.this, "Estou a andar para a direita", Toast.LENGTH_SHORT).show();
                     }
                     mBTArrayAdapter.clear();
@@ -147,18 +186,24 @@ public class ModoJogo extends AppCompatActivity {
                     if (mConnectedThread != null) {
                         mConnectedThread.write("50");
                         mConnectedThread.write("50");
+                        movimentos.setMovimento("Andei para trás");
+                        movimentos.setData(data);
+                        reff.push().setValue(movimentos);
                         Toast.makeText(ModoJogo.this, "Estou a andar para trás", Toast.LENGTH_SHORT).show();
                     }
                     mBTArrayAdapter.clear();
                 }
             });
 
-            btn_sozinho.setOnClickListener(new View.OnClickListener() {
+           btn_sozinho.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mConnectedThread != null) {
                         mConnectedThread.write("32");
                         mConnectedThread.write("32");
+                        movimentos.setMovimento("Andei sozinho");
+                        movimentos.setData(data);
+                        reff.push().setValue(movimentos);
                         Toast.makeText(ModoJogo.this, "Estou a andar sozinho", Toast.LENGTH_SHORT).show();
                     }
                     mBTArrayAdapter.clear();
@@ -168,22 +213,28 @@ public class ModoJogo extends AppCompatActivity {
             btn_conec.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    bluetoothOn(v);
                     discover(v);
                 }
             });
 
-            btn_motorB.setOnClickListener(new View.OnClickListener() {
+            btn_color.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    bluetoothOff(v);
-                    finish();
+                    if (mConnectedThread != null) {
+                        mConnectedThread.write("100");
+                        mConnectedThread.write("100");
+                        movimentos.setMovimento("Detetei uma cor");
+                        movimentos.setData(data);
+                        reff.push().setValue(movimentos);
+                        Toast.makeText(ModoJogo.this, "Estou a detetar cores", Toast.LENGTH_SHORT).show();
+                    }
+                    mBTArrayAdapter.clear();
                 }
             });
         }
     }
 
-    private void bluetoothOn(View v) {
+    private void bluetoothOn() {
         if (!mBTAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
@@ -304,10 +355,11 @@ public class ModoJogo extends AppCompatActivity {
         return device.createRfcommSocketToServiceRecord(BTMODULEUUID);
     }
 
-    public class ConnectedThread extends Thread {
+    public static class ConnectedThread extends Thread {
         private final BluetoothSocket mmSocket;
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
+        private Handler mHandler;
 
         public ConnectedThread(BluetoothSocket socket) {
             mmSocket = socket;
@@ -346,7 +398,6 @@ public class ModoJogo extends AppCompatActivity {
             }
         }
 
-        /* Call this from the main activity to send data to the remote device */
         public void write(String input) {
             byte[] bytes = input.getBytes();           //converts entered String into bytes
             try {
@@ -355,7 +406,6 @@ public class ModoJogo extends AppCompatActivity {
             }
         }
 
-        /* Call this from the main activity to shutdown the connection */
         public void cancel() {
             try {
                 mmSocket.close();
@@ -363,5 +413,6 @@ public class ModoJogo extends AppCompatActivity {
             }
         }
     }
+    
 }
 

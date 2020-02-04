@@ -22,6 +22,7 @@ public class ColorSensor {
 		if (a == 0) {
 			System.out.println("Detetei Vermelho");
 			Button.LEDPattern(2); // vermelho
+			a = colorsensor.getColorID();
 		} else if (a == 1) {
 			System.out.println("Detetei Verde");
 			Button.LEDPattern(1); // verde

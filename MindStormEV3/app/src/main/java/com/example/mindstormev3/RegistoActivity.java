@@ -57,7 +57,7 @@ public class RegistoActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             alert("Usuario sucesso");
-                            Intent intent = new Intent(RegistoActivity.this, PerfilActivity.class);
+                            Intent intent = new Intent(RegistoActivity.this, LoginActivity.class);
                             startActivity(intent);
                             finish();
                         }else{
